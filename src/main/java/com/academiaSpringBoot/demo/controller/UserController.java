@@ -1,6 +1,5 @@
 package com.academiaSpringBoot.demo.controller;
 
-import com.academiaSpringBoot.demo.Model.User;
 import com.academiaSpringBoot.demo.createDTO.UserCreateDTO;
 import com.academiaSpringBoot.demo.responseDTO.UserResponseDTO;
 import com.academiaSpringBoot.demo.service.UserService;

@@ -1,10 +1,11 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.Model.User;
+import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.createDTO.UserCreateDTO;
 import com.academiaSpringBoot.demo.repository.UserRepository;
 import com.academiaSpringBoot.demo.responseDTO.UserResponseDTO;
 import com.academiaSpringBoot.demo.responseDTO.WorkoutResponseDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,11 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,  PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponseDTO createUser(UserCreateDTO dto) {
@@ -27,7 +30,8 @@ public class UserService {
         User user = User.builder()
                         .name(dto.name())
                         .email(dto.email())
-                        .password(dto.password())
+                        .password(passwordEncoder.encode(dto.password()))
+                        .role(User.Role.USER)
                         .build();
 
         User saved = userRepository.save(user);

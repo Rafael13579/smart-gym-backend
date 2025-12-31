@@ -1,4 +1,4 @@
-package com.academiaSpringBoot.demo.Model;
+package com.academiaSpringBoot.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;

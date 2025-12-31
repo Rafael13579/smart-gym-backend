@@ -1,11 +1,13 @@
 package com.academiaSpringBoot.demo.controller;
 
-import com.academiaSpringBoot.demo.Model.Exercise;
 import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
+import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
 import com.academiaSpringBoot.demo.service.ExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +24,10 @@ public class ExerciseController {
     }
 
     @PostMapping
-    public ResponseEntity<ExerciseResponseDTO> addExercise(@PathVariable Long workoutId, @RequestBody ExerciseCreateDTO dto) {
+    public ResponseEntity<ExerciseResponseDTO> addExercise(@RequestBody @Valid ExerciseCreateDTO dto, Authentication authentication) {
 
-        ExerciseResponseDTO exercise = exerciseService.create(workoutId, dto);
+        User user = (User) authentication.getPrincipal();
+        ExerciseResponseDTO exercise = exerciseService.create(user, dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(exercise);
     }

@@ -1,6 +1,6 @@
 package com.academiaSpringBoot.demo.repository;
 
-import com.academiaSpringBoot.demo.Model.Exercise;
+import com.academiaSpringBoot.demo.model.Exercise;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

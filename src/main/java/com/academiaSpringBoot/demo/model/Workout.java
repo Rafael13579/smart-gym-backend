@@ -1,6 +1,5 @@
-package com.academiaSpringBoot.demo.Model;
+package com.academiaSpringBoot.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 

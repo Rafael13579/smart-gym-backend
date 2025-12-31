@@ -1,7 +1,7 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.Model.Exercise;
-import com.academiaSpringBoot.demo.Model.TrainingSet;
+import com.academiaSpringBoot.demo.model.Exercise;
+import com.academiaSpringBoot.demo.model.TrainingSet;
 import com.academiaSpringBoot.demo.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;

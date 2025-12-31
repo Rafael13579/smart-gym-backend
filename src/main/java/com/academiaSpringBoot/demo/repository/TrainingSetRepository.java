@@ -1,7 +1,6 @@
 package com.academiaSpringBoot.demo.repository;
 
-import com.academiaSpringBoot.demo.Model.TrainingSet;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.model.TrainingSet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

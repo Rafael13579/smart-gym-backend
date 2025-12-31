@@ -1,18 +1,18 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.Model.Exercise;
-import com.academiaSpringBoot.demo.Model.TrainingSet;
-import com.academiaSpringBoot.demo.Model.Workout;
+import com.academiaSpringBoot.demo.model.Exercise;
+import com.academiaSpringBoot.demo.model.User;
+import com.academiaSpringBoot.demo.model.Workout;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
 import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
 import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,9 +26,13 @@ public class ExerciseService {
         this.workoutRepository = workoutRepository;
     }
 
-    public ExerciseResponseDTO create(Long workoutId, ExerciseCreateDTO dto) {
-        Workout workout = workoutRepository.findById(workoutId)
+    public ExerciseResponseDTO create(User user, ExerciseCreateDTO dto) {
+        Workout workout = workoutRepository.findById(dto.workoutId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+
+        if(!workout.getUser().getId().equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O workout não pertence ao usuário");
+        }
 
         Exercise exercise = Exercise.builder()
                 .name(dto.name())
