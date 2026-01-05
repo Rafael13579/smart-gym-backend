@@ -32,11 +32,6 @@ public class SecurityConfig {
                 // Rotas públicas
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-
                         .anyRequest().authenticated()
                 )
                 // JWT antes do filtro padrão

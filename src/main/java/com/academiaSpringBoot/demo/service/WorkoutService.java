@@ -1,6 +1,7 @@
 package com.academiaSpringBoot.demo.service;
 
 import com.academiaSpringBoot.demo.createDTO.WorkoutCreateDTO;
+import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.model.Workout;
@@ -25,8 +26,15 @@ public class WorkoutService {
 
     public WorkoutResponseDTO create(User user, WorkoutCreateDTO dto) {
 
+        boolean exist = workoutRepository.existsByUserAndDay(user, dto.day());
+
+        if(exist){
+            throw new BusinessException("Workout already exists at this day");
+        }
+
         Workout workout = Workout.builder()
                 .name(dto.name())
+                .day(dto.day())
                 .user(user)
                 .build();
 

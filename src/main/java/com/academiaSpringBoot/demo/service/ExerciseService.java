@@ -6,6 +6,8 @@ import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
 import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
 
@@ -40,7 +42,7 @@ public class ExerciseService {
         );
     }
 
-    public List<ExerciseResponseDTO> listAll() {
+    public List<ExerciseResponseDTO> listAllExercises() {
         return exerciseRepository.findAll()
                 .stream()
                 .map(this::mapResponseToDTO)
@@ -53,6 +55,12 @@ public class ExerciseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 
         exerciseRepository.delete(exercise);
+    }
+
+
+    public Page<ExerciseResponseDTO> findAll(Pageable pageable) {
+        return exerciseRepository.findAll(pageable)
+                .map(this::mapResponseToDTO);
     }
 
 

@@ -6,6 +6,10 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "workouts", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "day"})
+    }
+)
 @Entity
 @Builder
 @AllArgsConstructor
@@ -26,6 +30,11 @@ public class Workout {
     private User user;
 
     @OneToMany(mappedBy = "workout", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WorkoutExercise> workoutExercises;
+    private List<WorkoutExercise> workoutExercises = new ArrayList<>();
+
+
+    @Enumerated
+    @Column(nullable = false)
+    private WeekDays day;
 
 }
