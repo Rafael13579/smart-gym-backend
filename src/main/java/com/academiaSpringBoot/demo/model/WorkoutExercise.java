@@ -1,5 +1,6 @@
 package com.academiaSpringBoot.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 

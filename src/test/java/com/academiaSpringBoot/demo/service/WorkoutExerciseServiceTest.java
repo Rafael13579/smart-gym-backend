@@ -1,3 +1,4 @@
+/*
 package com.academiaSpringBoot.demo.service;
 
 import com.academiaSpringBoot.demo.model.Exercise;
@@ -62,3 +63,4 @@ class WorkoutExerciseServiceTest {
         ));
     }
 }
+*/

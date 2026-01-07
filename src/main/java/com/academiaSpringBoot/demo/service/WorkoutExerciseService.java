@@ -1,16 +1,17 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.model.Exercise;
-import com.academiaSpringBoot.demo.model.User;
-import com.academiaSpringBoot.demo.model.Workout;
-import com.academiaSpringBoot.demo.model.WorkoutExercise;
+import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
+import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class WorkoutExerciseService {
@@ -44,15 +45,46 @@ public class WorkoutExerciseService {
     @Transactional
     public void deleteWorkoutExercise(Long workoutId, Long weId, User user) {
 
-        WorkoutExercise we = workoutExerciseRepository.findById(weId)
+        Workout workout = workoutRepository.findByUserAndId(user, workoutId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+
+        WorkoutExercise we = workout.getWorkoutExercises().stream()
+                .filter(e -> e.getId().equals(weId))
+                .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout exercise not found"));
 
-        if (!we.getWorkout().getId().equals(workoutId)
-                || !we.getWorkout().getUser().equals(user)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not allowed");
-        }
-
-        workoutExerciseRepository.delete(we);
+        workout.getWorkoutExercises().remove(we);
     }
-}
+
+
+    public List<WorkoutExerciseResponseDTO> listByWorkout(Long workoutId, User user) {
+        Workout workout = workoutRepository.findByUserAndId(user, workoutId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+
+        List<WorkoutExercise> entities = workoutExerciseRepository.findByWorkout(workout);
+
+        return entities.stream()
+                .map(this::mapResponseToDTO)
+                .toList();
+    }
+
+    public WorkoutExerciseResponseDTO mapResponseToDTO(WorkoutExercise we) {
+        List<TrainingSetResponseDTO> trainingSets = we.getTrainingSets().stream()
+                .map(ts -> new TrainingSetResponseDTO(
+                        ts.getId(),
+                        ts.getWeight(),
+                        ts.getReps()))
+                .toList();
+
+        return new WorkoutExerciseResponseDTO(we.getId(),
+                we.getExercise().getId(),
+                we.getExercise().getName(),
+                we.getExercise().getMuscularGroup(),
+                we.getExercise().getDescription(),
+                trainingSets);
+
+
+        }
+    }
+
 

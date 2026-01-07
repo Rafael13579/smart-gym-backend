@@ -64,6 +64,7 @@ public class UserService {
                     .map(wk -> new WorkoutResponseDTO(
                             wk.getId(),
                             wk.getName(),
+                            wk.getDay(),
                             List.of()
                     ))
                     .toList();

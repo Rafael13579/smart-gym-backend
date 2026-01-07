@@ -1,13 +1,14 @@
 package com.academiaSpringBoot.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name = "workouts", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"user_id", "day"})
+@Table(name = "workout", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "workout_day"})
     }
 )
 @Entity
@@ -33,8 +34,8 @@ public class Workout {
     private List<WorkoutExercise> workoutExercises = new ArrayList<>();
 
 
-    @Enumerated
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "workout_day", nullable = false)
     private WeekDays day;
 
 }

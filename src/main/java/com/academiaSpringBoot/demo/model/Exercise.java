@@ -26,6 +26,7 @@ public class Exercise {
     @Column(nullable = false)
     private String description;
 
+    private String imageUrl;
 
     @OneToMany(mappedBy = "exercise")
     private List<WorkoutExercise> workouts;

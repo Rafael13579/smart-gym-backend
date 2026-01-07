@@ -4,16 +4,16 @@ import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.Exercise;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
-
-
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ExerciseService {
@@ -38,15 +38,9 @@ public class ExerciseService {
                 saved.getId(),
                 saved.getName(),
                 saved.getMuscularGroup(),
-                saved.getDescription()
+                saved.getDescription(),
+                saved.getImageUrl()
         );
-    }
-
-    public List<ExerciseResponseDTO> listAllExercises() {
-        return exerciseRepository.findAll()
-                .stream()
-                .map(this::mapResponseToDTO)
-                .toList();
     }
 
     @Transactional
@@ -57,21 +51,33 @@ public class ExerciseService {
         exerciseRepository.delete(exercise);
     }
 
-
     public Page<ExerciseResponseDTO> findAll(Pageable pageable) {
         return exerciseRepository.findAll(pageable)
                 .map(this::mapResponseToDTO);
     }
 
+    public List<ExerciseResponseDTO> autocompleteExercise(String name) {
+        Pageable limit = PageRequest.of(0, 5, Sort.by(Sort.Direction.ASC, "name"));
 
+        return exerciseRepository.findByNameStartingWithIgnoreCase(name.trim(), limit)
+                .map(this::mapResponseToDTO)
+                .getContent();
+    }
+
+    @Value("${app.upload.base-url}")
+    private String baseUrl;
 
     public ExerciseResponseDTO mapResponseToDTO(Exercise exercise) {
+        String finalUrl = (exercise.getImageUrl() != null)
+                ? baseUrl + exercise.getImageUrl()
+                : baseUrl + "default-exercise.png";
 
         return new ExerciseResponseDTO(
                 exercise.getId(),
                 exercise.getName(),
                 exercise.getMuscularGroup(),
-                exercise.getDescription()
+                exercise.getDescription(),
+                finalUrl
         );
     }
 }

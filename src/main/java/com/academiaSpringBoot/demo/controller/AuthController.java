@@ -5,12 +5,17 @@ import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.registerRequestDTO.RegisterRequestDTO;
 import com.academiaSpringBoot.demo.repository.UserRepository;
 import com.academiaSpringBoot.demo.service.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+@Tag(name = "Authentication", description = "endpoint para autenticação e login do usuário")
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
@@ -26,6 +31,13 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
+
+    //LOGIN
+    @Operation(summary = "Fazer login do usuário", description = "Faz login do usuário e gera um token")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+    })
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
         User user = userRepository.findByEmail(dto.email())
@@ -39,6 +51,14 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
+
+    //REGISTER
+    @Operation(summary = "Registrar novo usuário", description = "Cria um novo usuário no sistema")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "409", description = "Email já cadastrado")
+    })
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody RegisterRequestDTO dto) {
 

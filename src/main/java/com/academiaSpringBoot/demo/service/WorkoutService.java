@@ -4,11 +4,9 @@ import com.academiaSpringBoot.demo.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.User;
+import com.academiaSpringBoot.demo.model.WeekDays;
 import com.academiaSpringBoot.demo.model.Workout;
-import com.academiaSpringBoot.demo.model.WorkoutExercise;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
 import com.academiaSpringBoot.demo.responseDTO.WorkoutResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -24,8 +22,8 @@ public class WorkoutService {
         this.workoutRepository = workoutRepository;
     }
 
+    @Transactional
     public WorkoutResponseDTO create(User user, WorkoutCreateDTO dto) {
-
         boolean exist = workoutRepository.existsByUserAndDay(user, dto.day());
 
         if(exist){
@@ -42,6 +40,7 @@ public class WorkoutService {
         return mapResponseToDTO(saved);
     }
 
+
     public List<WorkoutResponseDTO> listByUser(User user) {
         return workoutRepository.findByUser(user)
                 .stream()
@@ -51,7 +50,6 @@ public class WorkoutService {
 
     @Transactional
     public WorkoutResponseDTO updateWorkoutName(Long workoutId, User user, String name) {
-
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
 
@@ -59,52 +57,52 @@ public class WorkoutService {
         return mapResponseToDTO(workout);
     }
 
-    @Transactional
     public void deleteWorkout(Long workoutId, User user) {
-
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
 
         workoutRepository.delete(workout);
     }
 
+    public WorkoutResponseDTO listWorkoutByDay(User user, WeekDays day) {
+        Workout workout = workoutRepository.findByUserAndDay(user, day)
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
+
+        return mapResponseToDTO(workout);
+    }
+
     public WorkoutResponseDTO mapResponseToDTO(Workout workout) {
 
-        List<WorkoutExerciseResponseDTO> exercises =
-                workout.getWorkoutExercises()
-                        .stream()
-                        .map(this::mapWorkoutExercise)
-                        .toList();
-
+       /* List<WorkoutExerciseResponseDTO> we = workout.getWorkoutExercises().stream()
+                .map(this::mapResponseToWDTO)
+                .toList();
+        */
         return new WorkoutResponseDTO(
                 workout.getId(),
                 workout.getName(),
-                exercises
+                workout.getDay(),
+                List.of()
         );
     }
 
-    private WorkoutExerciseResponseDTO mapWorkoutExercise(WorkoutExercise we) {
+    /*
+    public WorkoutExerciseResponseDTO mapResponseToWDTO(WorkoutExercise we) {
+        List<TrainingSetResponseDTO> trainingSets = we.getTrainingSets().stream()
+                .map(ts -> new TrainingSetResponseDTO(
+                        ts.getId(),
+                        ts.getWeight(),
+                        ts.getReps()))
+                .toList();
 
-        List<TrainingSetResponseDTO> sets =
-                we.getTrainingSets()
-                        .stream()
-                        .map(ts -> new TrainingSetResponseDTO(
-                                ts.getId(),
-                                ts.getWeight(),
-                                ts.getReps()
-                        ))
-                        .toList();
-
-        return new WorkoutExerciseResponseDTO(
-                we.getId(),
+        return new WorkoutExerciseResponseDTO(we.getId(),
                 we.getExercise().getId(),
                 we.getExercise().getName(),
                 we.getExercise().getMuscularGroup(),
                 we.getExercise().getDescription(),
-                sets
-        );
+                trainingSets);
+
+
     }
-
-
+*/
 }
 
