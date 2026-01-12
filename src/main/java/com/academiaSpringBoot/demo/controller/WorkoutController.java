@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class WorkoutController {
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado")
     })
     @PostMapping
-    public ResponseEntity<WorkoutResponseDTO> create(@RequestBody @Valid WorkoutCreateDTO dto, Authentication authentication) {
+    public ResponseEntity<WorkoutResponseDTO> create(@RequestBody @Validated(WorkoutCreateDTO.OnCreate.class) WorkoutCreateDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(workoutService.create(user, dto));
@@ -66,7 +67,7 @@ public class WorkoutController {
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado")
     })
     @PutMapping("/{workoutId}")
-    public ResponseEntity<WorkoutResponseDTO> updateName(@PathVariable Long workoutId, @RequestBody @Valid WorkoutCreateDTO dto, Authentication authentication) {
+    public ResponseEntity<WorkoutResponseDTO> updateName(@PathVariable Long workoutId, @RequestBody @Validated(WorkoutCreateDTO.OnUpdate.class) WorkoutCreateDTO dto, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(workoutService.updateWorkoutName(workoutId, user, dto.name()));

@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -44,16 +45,13 @@ public class ExerciseController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<ExerciseResponseDTO> createExercise(@RequestBody @Valid ExerciseCreateDTO dto) {
+    public ResponseEntity<ExerciseResponseDTO> createExercise(@RequestBody @Validated(ExerciseCreateDTO.OnCreate.class) ExerciseCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(exerciseService.create(dto));
     }
 
 
     //DELETE
-    @Operation(
-            summary = "Remover exercício",
-            description = "Remove um exercício existente do sistema (apenas administradores)"
-    )
+    @Operation(summary = "Remover exercício", description = "Remove um exercício existente do sistema (apenas administradores)")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Exercício removido com sucesso"),
             @ApiResponse(responseCode = "404", description = "Exercício não encontrado"),
@@ -103,11 +101,11 @@ public class ExerciseController {
     //UPDATE
     @Operation(summary = "Atualização de atributos de exercíco", description = "Atualiza algum atributo do exercício")
     @ApiResponses(
-            @ApiResponse(responseCode = "201", description = "Exercício atualizado com sucesso")
+            @ApiResponse(responseCode = "200", description = "Exercício atualizado com sucesso")
     )
     @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/exerciseId")
-    public ResponseEntity<ExerciseResponseDTO> partialExerciseUpdate(@PathVariable Long exerciseId, ExerciseCreateDTO dto) {
+    public ResponseEntity<ExerciseResponseDTO> partialExerciseUpdate(@PathVariable Long exerciseId, @RequestBody @Validated(ExerciseCreateDTO.OnUpdate.class) ExerciseCreateDTO dto) {
         return ResponseEntity.ok(exerciseService.partialUpdate(exerciseId, dto));
     }
 

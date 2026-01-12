@@ -1,5 +1,6 @@
 package com.academiaSpringBoot.demo.service;
 
+import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
@@ -7,9 +8,7 @@ import com.academiaSpringBoot.demo.repository.WorkoutRepository;
 import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
 import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
 import jakarta.transaction.Transactional;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -30,10 +29,10 @@ public class WorkoutExerciseService {
     public void addExerciseToWorkout(Long workoutId, Long exerciseId, User user) {
 
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
 
         Exercise exercise = exerciseRepository.findById(exerciseId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exercise not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));
 
         WorkoutExercise we = new WorkoutExercise();
         we.setWorkout(workout);
@@ -46,20 +45,21 @@ public class WorkoutExerciseService {
     public void deleteWorkoutExercise(Long workoutId, Long weId, User user) {
 
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
 
         WorkoutExercise we = workout.getWorkoutExercises().stream()
                 .filter(e -> e.getId().equals(weId))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout exercise not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout exercise not found"));
 
         workout.getWorkoutExercises().remove(we);
+        workoutExerciseRepository.delete(we);
     }
 
-
+    @Transactional
     public List<WorkoutExerciseResponseDTO> listByWorkout(Long workoutId, User user) {
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
 
         List<WorkoutExercise> entities = workoutExerciseRepository.findByWorkout(workout);
 

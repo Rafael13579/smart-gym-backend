@@ -38,8 +38,7 @@ class JwtServiceTest {
     void shouldThrowExceptionForInvalidToken() {
         String invalidToken = "invalid.jwt.token";
 
-        assertThrows(
-                Exception.class,
+        assertThrows(Exception.class,
                 () -> jwtService.getUserIdFromToken(invalidToken)
         );
     }

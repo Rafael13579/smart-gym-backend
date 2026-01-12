@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,11 +37,26 @@ public class UserController {
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserCreateDTO dto) {
+    public ResponseEntity<UserResponseDTO> create(@RequestBody @Validated(UserCreateDTO.OnCreate.class) UserCreateDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).
                 body(userService.createUser(dto));
     }
 
+    //DELETE
+    @Operation(summary = "Deletar usuário", description = "Deleta um usuário do banco de dados")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado")
+    })
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> delete(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+
+        return ResponseEntity.noContent().build();
+    }
 
     //LIST
     @Operation(summary = "Listar usuários", description = "Retorna uma lista com todos os usuários cadastrados.")
@@ -48,8 +64,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
     })
     @GetMapping
-    public List<UserResponseDTO> listAll() {
-        return userService.listAllUsers();
+    public ResponseEntity<List<UserResponseDTO>> listAll() {
+        return ResponseEntity.ok(userService.listAllUsers());
     }
 
 
@@ -59,9 +75,19 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    @GetMapping("/{id}")
-    public UserResponseDTO getUser(@PathVariable Long id) {
-        return userService.getUserById(id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseDTO> findById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 
+    //UPDATE
+    @Operation(summary = "Atualizar nome do usuário", description = "Atualiza um nome do usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Nome do usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserResponseDTO> updateName(@PathVariable Long userId, @RequestBody @Validated(UserCreateDTO.OnUpdate.class) UserCreateDTO dto) {
+        return ResponseEntity.ok(userService.updateName(userId, dto));
+    }
 }

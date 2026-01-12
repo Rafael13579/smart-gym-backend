@@ -41,6 +41,7 @@ public class WorkoutService {
     }
 
 
+    @Transactional
     public List<WorkoutResponseDTO> listByUser(User user) {
         return workoutRepository.findByUser(user)
                 .stream()
@@ -57,6 +58,7 @@ public class WorkoutService {
         return mapResponseToDTO(workout);
     }
 
+    @Transactional
     public void deleteWorkout(Long workoutId, User user) {
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
@@ -64,6 +66,7 @@ public class WorkoutService {
         workoutRepository.delete(workout);
     }
 
+    @Transactional
     public WorkoutResponseDTO listWorkoutByDay(User user, WeekDays day) {
         Workout workout = workoutRepository.findByUserAndDay(user, day)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));

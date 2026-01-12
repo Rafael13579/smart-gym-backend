@@ -29,6 +29,7 @@ public class TrainingSetService {
         this.exerciseRepository = exerciseRepository;
     }
 
+    @Transactional
     public TrainingSetResponseDTO create(Long workoutId, Long exerciseId, TrainingSetCreateDTO dto, User user){
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Workout not found"));

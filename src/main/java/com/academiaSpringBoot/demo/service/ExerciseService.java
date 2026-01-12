@@ -24,6 +24,7 @@ public class ExerciseService {
         this.exerciseRepository = exerciseRepository;
     }
 
+    @Transactional
     public ExerciseResponseDTO create(ExerciseCreateDTO dto) {
 
         Exercise exercise = Exercise.builder()
@@ -51,6 +52,7 @@ public class ExerciseService {
         exerciseRepository.delete(exercise);
     }
 
+    @Transactional
     public Page<ExerciseResponseDTO> findAll(Pageable pageable) {
         return exerciseRepository.findAll(pageable)
                 .map(this::mapResponseToDTO);
@@ -64,6 +66,7 @@ public class ExerciseService {
                 .getContent();
     }
 
+    @Transactional
     public ExerciseResponseDTO partialUpdate(Long exerciseId, ExerciseCreateDTO dto) {
         Exercise ex = exerciseRepository.findById(exerciseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Exercise not found"));

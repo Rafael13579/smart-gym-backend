@@ -8,16 +8,11 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "DTO para criação ou atualização de um treino")
 public record WorkoutCreateDTO(
 
-        @Schema(
-                description = "Nome do treino",
-                example = "Treino A - Peito e Tríceps"
-        )
-        @NotBlank
+        @Schema(description = "Nome do treino", example = "Treino A - Peito e Tríceps")
+        @NotBlank(groups = {OnCreate.class, OnUpdate.class})
         String name,
 
-        @Schema(
-                description = "Dia da semana em que o treino será executado",
-                example = "MONDAY",
+        @Schema(description = "Dia da semana em que o treino será executado", example = "MONDAY",
                 allowableValues = {
                         "MONDAY",
                         "TUESDAY",
@@ -28,6 +23,9 @@ public record WorkoutCreateDTO(
                         "SUNDAY"
                 }
         )
-        @NotNull
+        @NotNull(groups = OnCreate.class)
         WeekDays day
-) {}
+) {
+        public interface OnUpdate{}
+        public interface OnCreate{}
+}
