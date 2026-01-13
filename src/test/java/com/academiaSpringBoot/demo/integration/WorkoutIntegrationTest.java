@@ -1,6 +1,6 @@
 package com.academiaSpringBoot.demo.integration;
 
-import com.academiaSpringBoot.demo.createDTO.WorkoutCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.User;
@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

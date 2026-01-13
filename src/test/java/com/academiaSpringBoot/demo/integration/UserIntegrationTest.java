@@ -1,6 +1,6 @@
 package com.academiaSpringBoot.demo.integration;
 
-import com.academiaSpringBoot.demo.createDTO.UserCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.UserCreateDTO;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.repository.UserRepository;
 import com.academiaSpringBoot.demo.service.UserService;

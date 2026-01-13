@@ -1,6 +1,6 @@
 package com.academiaSpringBoot.demo.integration;
 
-import com.academiaSpringBoot.demo.createDTO.TrainingSetCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.*;
 import com.academiaSpringBoot.demo.service.TrainingSetService;

@@ -31,4 +31,6 @@ public class Exercise {
     @OneToMany(mappedBy = "exercise")
     private List<WorkoutExercise> workouts;
 
+    public Exercise(Object o, String s, String s1, String description) {
+    }
 }

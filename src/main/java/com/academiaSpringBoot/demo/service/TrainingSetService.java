@@ -1,10 +1,10 @@
 package com.academiaSpringBoot.demo.service;
 
 import com.academiaSpringBoot.demo.model.*;
-import com.academiaSpringBoot.demo.createDTO.TrainingSetCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.TrainingSetResponseDTO;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.TrainingSetRepository;
 import jakarta.transaction.Transactional;
@@ -89,6 +89,21 @@ public class TrainingSetService {
         }
 
         return mapToResponseDTO(set);
+    }
+
+
+    @Transactional
+    public void createQuickSet(Long workoutExerciseId, TrainingSetCreateDTO dto) {
+        WorkoutExercise we = workoutExerciseRepository.findById(workoutExerciseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "WorkoutExercise not found"));
+
+        TrainingSet set = TrainingSet.builder()
+                .weight(dto.weight())
+                .reps(dto.reps())
+                .workoutExercise(we)
+                .build();
+
+        trainingSetRepository.save(set);
     }
 
     @Transactional

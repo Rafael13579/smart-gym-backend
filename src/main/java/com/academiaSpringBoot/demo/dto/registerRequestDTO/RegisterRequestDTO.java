@@ -1,4 +1,4 @@
-package com.academiaSpringBoot.demo.registerRequestDTO;
+package com.academiaSpringBoot.demo.dto.registerRequestDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

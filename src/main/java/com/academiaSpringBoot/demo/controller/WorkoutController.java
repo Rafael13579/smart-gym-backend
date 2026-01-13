@@ -1,15 +1,14 @@
 package com.academiaSpringBoot.demo.controller;
 
-import com.academiaSpringBoot.demo.createDTO.WorkoutCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.model.WeekDays;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
 import com.academiaSpringBoot.demo.service.WorkoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Wokrout", description = "Gerenciamento de treino")
+@Tag(name = "Workout", description = "Gerenciamento de treino")
 @RestController
 @RequestMapping("/workouts")
 @CrossOrigin

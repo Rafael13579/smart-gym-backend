@@ -1,8 +1,8 @@
 package com.academiaSpringBoot.demo.controller;
 
-import com.academiaSpringBoot.demo.loginDTO.LoginRequestDTO;
+import com.academiaSpringBoot.demo.dto.loginDTO.LoginRequestDTO;
 import com.academiaSpringBoot.demo.model.User;
-import com.academiaSpringBoot.demo.registerRequestDTO.RegisterRequestDTO;
+import com.academiaSpringBoot.demo.dto.registerRequestDTO.RegisterRequestDTO;
 import com.academiaSpringBoot.demo.repository.UserRepository;
 import com.academiaSpringBoot.demo.service.JwtService;
 import io.swagger.v3.oas.annotations.Operation;

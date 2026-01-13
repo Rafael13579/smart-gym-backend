@@ -3,7 +3,7 @@ package com.academiaSpringBoot.demo.service;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.Exercise;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
-import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.ExerciseResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.ExerciseCreateDTO;
 import java.util.List;
 
 

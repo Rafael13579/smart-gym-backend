@@ -1,12 +1,12 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.createDTO.TrainingSetCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.TrainingSetRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.TrainingSetResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

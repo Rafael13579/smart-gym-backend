@@ -4,7 +4,7 @@ import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutExerciseResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

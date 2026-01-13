@@ -1,4 +1,4 @@
-package com.academiaSpringBoot.demo.createDTO;
+package com.academiaSpringBoot.demo.dto.createDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;

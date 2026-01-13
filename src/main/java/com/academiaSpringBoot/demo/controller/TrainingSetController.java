@@ -1,8 +1,8 @@
 package com.academiaSpringBoot.demo.controller;
 
-import com.academiaSpringBoot.demo.createDTO.TrainingSetCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.model.User;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.TrainingSetResponseDTO;
 import com.academiaSpringBoot.demo.service.TrainingSetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

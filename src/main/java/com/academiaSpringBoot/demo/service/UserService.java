@@ -2,10 +2,10 @@ package com.academiaSpringBoot.demo.service;
 
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.User;
-import com.academiaSpringBoot.demo.createDTO.UserCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.UserCreateDTO;
 import com.academiaSpringBoot.demo.repository.UserRepository;
-import com.academiaSpringBoot.demo.responseDTO.UserResponseDTO;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.UserResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
 package com.academiaSpringBoot.demo.controller;
 
 import com.academiaSpringBoot.demo.model.User;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutExerciseResponseDTO;
 import com.academiaSpringBoot.demo.service.WorkoutExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

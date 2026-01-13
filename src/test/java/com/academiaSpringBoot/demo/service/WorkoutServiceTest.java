@@ -1,12 +1,12 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.createDTO.WorkoutCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.model.WeekDays;
 import com.academiaSpringBoot.demo.model.Workout;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

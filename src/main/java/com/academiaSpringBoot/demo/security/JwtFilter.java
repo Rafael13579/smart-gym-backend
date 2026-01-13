@@ -25,13 +25,13 @@ public class JwtFilter extends OncePerRequestFilter {
         this.userRepository = userRepository;
     }
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String path = request.getServletPath();
+        System.out.println("--- [DEBUG JWT] Request para: " + path);
 
-
+        // Pula rotas de auth
         if (path.startsWith("/auth")) {
             filterChain.doFilter(request, response);
             return;
@@ -39,27 +39,42 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
+        // 1. Verifica se o Header existe
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("--- [DEBUG JWT] Falha: Header ausente ou sem Bearer");
             filterChain.doFilter(request, response);
             return;
         }
 
+        // 2. Extrai o token
         String token = authHeader.substring(7);
+        System.out.println("--- [DEBUG JWT] Token extraído: " + token);
 
         try {
+            // 3. Tenta pegar o ID do token
             Long userId = jwtService.getUserIdFromToken(token);
+            System.out.println("--- [DEBUG JWT] User ID extraído do Token: " + userId);
 
-            User user = userRepository.findById(userId).orElse(null);
+            if (userId != null) {
+                // 4. Busca no banco Postgres
+                User user = userRepository.findById(userId).orElse(null);
 
-            if (user != null) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        user,null, user.getAuthorities());
+                if (user != null) {
+                    System.out.println("--- [DEBUG JWT] Usuário encontrado no Banco: " + user.getEmail());
+                    System.out.println("--- [DEBUG JWT] Roles/Authorities: " + user.getAuthorities());
 
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            user, null, user.getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("--- [DEBUG JWT] SUCESSO: Contexto de segurança definido!");
+                } else {
+                    System.out.println("--- [DEBUG JWT] ERRO: ID " + userId + " existe no token, mas NÃO existe no banco de dados.");
+                }
             }
-
         } catch (Exception e) {
+            System.out.println("--- [DEBUG JWT] EXCEPTION: " + e.getMessage());
+            e.printStackTrace(); // Isso vai mostrar se o token expirou ou assinatura falhou
             SecurityContextHolder.clearContext();
         }
 

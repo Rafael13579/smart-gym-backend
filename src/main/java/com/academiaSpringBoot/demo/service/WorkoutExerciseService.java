@@ -5,8 +5,8 @@ import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
-import com.academiaSpringBoot.demo.responseDTO.TrainingSetResponseDTO;
-import com.academiaSpringBoot.demo.responseDTO.WorkoutExerciseResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.TrainingSetResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutExerciseResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public class WorkoutExerciseService {
     }
 
     @Transactional
-    public void addExerciseToWorkout(Long workoutId, Long exerciseId, User user) {
+    public Long addExerciseToWorkout(Long workoutId, Long exerciseId, User user) {
 
         Workout workout = workoutRepository.findByUserAndId(user, workoutId)
                 .orElseThrow(() -> new ResourceNotFoundException("Workout not found"));
@@ -38,7 +38,9 @@ public class WorkoutExerciseService {
         we.setWorkout(workout);
         we.setExercise(exercise);
 
-        workoutExerciseRepository.save(we);
+        WorkoutExercise saved = workoutExerciseRepository.save(we);
+
+        return saved.getId();
     }
 
     @Transactional

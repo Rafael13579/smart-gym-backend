@@ -1,9 +1,9 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.createDTO.UserCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.UserCreateDTO;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.repository.UserRepository;
-import com.academiaSpringBoot.demo.responseDTO.UserResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.UserResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

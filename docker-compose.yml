@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  api-academia:
+    build: src
+    container_name: academia-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - meu-banco-postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://meu-banco-postgres:5432/academia_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1112
+    networks:
+      - academia-network
+
+  meu-banco-postgres:
+    image: postgres:15-alpine
+    container_name: academia-db-pg
+    environment:
+      - POSTGRES_DB=academia_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1112
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - academia-network
+
+networks:
+  academia-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

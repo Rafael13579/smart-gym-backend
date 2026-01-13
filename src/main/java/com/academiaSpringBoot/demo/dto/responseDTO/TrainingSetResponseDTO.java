@@ -1,4 +1,4 @@
-package com.academiaSpringBoot.demo.responseDTO;
+package com.academiaSpringBoot.demo.dto.responseDTO;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

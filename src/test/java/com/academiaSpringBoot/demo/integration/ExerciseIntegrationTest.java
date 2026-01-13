@@ -1,10 +1,10 @@
 package com.academiaSpringBoot.demo.integration;
 
-import com.academiaSpringBoot.demo.createDTO.ExerciseCreateDTO;
+import com.academiaSpringBoot.demo.dto.createDTO.ExerciseCreateDTO;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.Exercise;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
-import com.academiaSpringBoot.demo.responseDTO.ExerciseResponseDTO;
+import com.academiaSpringBoot.demo.dto.responseDTO.ExerciseResponseDTO;
 import com.academiaSpringBoot.demo.service.ExerciseService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
