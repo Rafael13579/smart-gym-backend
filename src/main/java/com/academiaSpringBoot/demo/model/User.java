@@ -32,11 +32,23 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column
+    private Double weight;
+
+    @Column
+    private Double height;
+
+    @Column(nullable = false)
+    private Integer age;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workout> workouts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private UserSex sex;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

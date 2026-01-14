@@ -7,17 +7,11 @@ import jakarta.validation.constraints.NotBlank;
 @Schema(description = "DTO para login do usuário")
 public record LoginRequestDTO(
 
-        @Schema(
-                description = "Senha do usuário",
-                example = "123456"
-        )
+        @Schema(description = "Senha do usuário", example = "123456")
         @NotBlank
         String password,
 
-        @Schema(
-                description = "Email do usuário",
-                example = "rafael@email.com"
-        )
+        @Schema(description = "Email do usuário", example = "rafael@email.com")
         @Email
         @NotBlank
         String email

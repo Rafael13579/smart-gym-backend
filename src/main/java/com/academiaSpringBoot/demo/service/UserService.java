@@ -1,5 +1,6 @@
 package com.academiaSpringBoot.demo.service;
 
+import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.dto.createDTO.UserCreateDTO;
@@ -27,15 +28,15 @@ public class UserService {
     public UserResponseDTO createUser(UserCreateDTO dto) {
 
         if(userRepository.existsByEmail(dto.email())) {
-            throw new ResourceNotFoundException("Email already exists");
+            throw new BusinessException("Email already exists");
         }
 
         User user = User.builder()
-                        .name(dto.name())
-                        .email(dto.email())
-                        .password(passwordEncoder.encode(dto.password()))
-                        .role(User.Role.USER)
-                        .build();
+                .name(dto.name())
+                .email(dto.email())
+                .password(passwordEncoder.encode(dto.password()))
+                .role(User.Role.USER)
+                .build();
 
         User saved = userRepository.save(user);
 
