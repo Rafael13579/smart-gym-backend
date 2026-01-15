@@ -2,6 +2,7 @@ package com.academiaSpringBoot.demo.controller;
 
 
 import com.academiaSpringBoot.demo.dto.gemini.AiGenerationRequestDTO;
+import com.academiaSpringBoot.demo.dto.gemini.AiReplaceWorkoutPlanDTO;
 import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.service.AiWorkoutService;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,15 @@ public class AiController {
         User user = (User) authentication.getPrincipal();
 
         aiWorkoutService.generateWorkoutForUser(user, request);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/replace")
+    public ResponseEntity<Void> replaceWorkout(@RequestBody AiReplaceWorkoutPlanDTO replace, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+
+        aiWorkoutService.replaceWorkoutPlan(user, replace);
 
         return ResponseEntity.ok().build();
     }

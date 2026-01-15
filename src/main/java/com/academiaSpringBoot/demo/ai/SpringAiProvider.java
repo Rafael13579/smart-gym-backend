@@ -1,21 +1,23 @@
 package com.academiaSpringBoot.demo.ai;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class SpringAiProvider implements AiProvider {
 
-    private final ChatClient chatClient;
+    private final ChatModel chatModel;
 
-    @Override
+    public SpringAiProvider(ChatModel chatModel) {
+        this.chatModel = chatModel;
+    }
+
     public String generate(String prompt) {
-        return chatClient
-                .prompt()
-                .user(prompt)
-                .call()
-                .content();
+        return chatModel
+                .call(new Prompt(prompt))
+                .getResult()
+                .getOutput()
+                .getContent();
     }
 }
