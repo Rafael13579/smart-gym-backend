@@ -7,5 +7,5 @@ public record AiGenerationRequestDTO(
         String goal,               // ex: Hipertrofia
         String experienceLevel,    // ex: Intermediário
         Integer durationInMinutes, // ex: 60
-        List<WeekDays> availableDays // ex: ["MONDAY", "WEDNESDAY", "FRIDAY"]
+        List<WeekDays> availableDays// ex: ["MONDAY", "WEDNESDAY", "FRIDAY"]
 ) {}

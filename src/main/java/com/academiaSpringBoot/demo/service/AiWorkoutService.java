@@ -1,82 +1,73 @@
 package com.academiaSpringBoot.demo.service;
 
-import com.academiaSpringBoot.demo.client.GeminiClient;
+import com.academiaSpringBoot.demo.ai.AiProvider;
 import com.academiaSpringBoot.demo.dto.createDTO.TrainingSetCreateDTO;
 import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.dto.gemini.AiGenerationRequestDTO;
-import com.academiaSpringBoot.demo.dto.gemini.GeminiRequestDTO;
-import com.academiaSpringBoot.demo.dto.gemini.GeminiResponseDTO;
 import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AiWorkoutService {
 
-    private final GeminiClient geminiClient;
+    private final AiProvider aiProvider;
     private final WorkoutService workoutService;
     private final WorkoutExerciseService workoutExerciseService;
-    private final ObjectMapper objectMapper;
-    private final ExerciseRepository exerciseRepository;
     private final TrainingSetService trainingSetService;
-
-    @Value("${gemini.api.key}")
-    private String apiKey;
-
-    public AiWorkoutService(
-            GeminiClient geminiClient,
-            WorkoutService workoutService,
-            WorkoutExerciseService workoutExerciseService,
-            ObjectMapper objectMapper,
-            ExerciseRepository exerciseRepository,
-            TrainingSetService trainingSetService
-    ) {
-        this.geminiClient = geminiClient;
-        this.workoutService = workoutService;
-        this.workoutExerciseService = workoutExerciseService;
-        this.objectMapper = objectMapper;
-        this.exerciseRepository = exerciseRepository;
-        this.trainingSetService = trainingSetService;
-    }
+    private final ExerciseRepository exerciseRepository;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public void generateWorkoutForUser(User user, AiGenerationRequestDTO request) {
 
-        String prompt = createPrompt(user, request);
+        UserProfile profile = user.getProfile();
 
-        GeminiRequestDTO geminiRequest = GeminiRequestDTO.fromPrompt(prompt);
-        GeminiResponseDTO response = geminiClient.generateContent(apiKey, geminiRequest);
+        if (profile == null) {
+            throw new IllegalStateException("Usuário não possui perfil cadastrado");
+        }
 
-        String jsonContent = cleanJson(response.getText());
+        String prompt = createPrompt(user, profile, request);
+
+        String rawResponse = aiProvider.generate(prompt);
+        String jsonContent = cleanJson(rawResponse);
 
         try {
             List<AiWorkoutPlanDTO> plans =
                     objectMapper.readValue(jsonContent, new TypeReference<>() {});
+
             persistWorkouts(user, plans);
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar treino por IA", e);
+            throw new RuntimeException("Erro ao processar resposta da IA", e);
         }
     }
 
-    private String createPrompt(User user, AiGenerationRequestDTO request) {
-        String days = request.availableDays().toString();
+    // ================= PROMPT =================
+
+    private String createPrompt(User user, UserProfile profile, AiGenerationRequestDTO request) {
 
         return String.format("""
-            Atue como um personal trainer.
-            
-            Gere um plano de treino para:
+            Atue como um personal trainer profissional.
+
+            Gere um plano de treino para o seguinte usuário:
             - Nome: %s
             - Objetivo: %s
             - Nível: %s
             - Duração: %d minutos
             - Dias disponíveis: %s
+            - Idade: %d
+            - Peso: %.2f
+            - Altura: %.2f
+            - Sexo: %s
 
             Retorne APENAS um JSON cru (sem markdown), exatamente neste formato:
 
@@ -100,45 +91,56 @@ public class AiWorkoutService {
             Regras obrigatórias:
             - Nunca retorne null
             - Todos os campos são obrigatórios
-            - Dias da semana em inglês (MONDAY, TUESDAY...)
+            - "day" DEVE ser um dos valores:
+              MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+            - Gere no máximo 5 exercícios por treino
+            - Gere no máximo 4 séries por exercício
             """,
                 user.getName(),
                 request.goal(),
                 request.experienceLevel(),
                 request.durationInMinutes(),
-                days
+                request.availableDays(),
+                profile.getAge(),
+                profile.getWeight(),
+                profile.getHeight(),
+                profile.getSex()
         );
     }
+
+    // ================= PERSISTÊNCIA =================
 
     private void persistWorkouts(User user, List<AiWorkoutPlanDTO> plans) {
 
         for (AiWorkoutPlanDTO plan : plans) {
 
-            WorkoutResponseDTO workout = workoutService.create(user, new WorkoutCreateDTO(plan.workoutName(), plan.day()));
+            WorkoutResponseDTO workout =
+                    workoutService.create(
+                            user,
+                            new WorkoutCreateDTO(plan.workoutName(), plan.day())
+                    );
 
             for (AiExerciseDTO exDto : plan.exercises()) {
 
                 if (exDto.exerciseName() == null || exDto.exerciseName().isBlank()) {
-                    throw new RuntimeException("IA retornou exercício sem nome");
+                    throw new IllegalStateException("IA retornou exercício sem nome");
                 }
-
-                String muscularGroup =
-                        exDto.muscularGroup() != null && !exDto.muscularGroup().isBlank()
-                                ? exDto.muscularGroup()
-                                : "Indefinido";
-
-                String description =
-                        exDto.description() != null && !exDto.description().isBlank()
-                                ? exDto.description()
-                                : "Exercício gerado automaticamente";
 
                 Exercise exercise = exerciseRepository
                         .findByName(exDto.exerciseName())
                         .orElseGet(() -> {
                             Exercise e = new Exercise();
                             e.setName(exDto.exerciseName());
-                            e.setMuscularGroup(muscularGroup);
-                            e.setDescription(description);
+                            e.setMuscularGroup(
+                                    exDto.muscularGroup() != null && !exDto.muscularGroup().isBlank()
+                                            ? exDto.muscularGroup()
+                                            : "Indefinido"
+                            );
+                            e.setDescription(
+                                    exDto.description() != null && !exDto.description().isBlank()
+                                            ? exDto.description()
+                                            : "Exercício gerado automaticamente"
+                            );
                             return exerciseRepository.save(e);
                         });
 
@@ -152,11 +154,11 @@ public class AiWorkoutService {
                 if (exDto.sets() != null) {
                     for (AiSetDTO setAi : exDto.sets()) {
 
-                        Double weight = setAi.weight() != null ? setAi.weight() : 10.0;
-                        Integer reps = setAi.reps() != null ? setAi.reps() : 12;
-
                         TrainingSetCreateDTO setDTO =
-                                new TrainingSetCreateDTO(weight, reps);
+                                new TrainingSetCreateDTO(
+                                        setAi.weight() != null ? setAi.weight() : 10.0,
+                                        setAi.reps() != null ? setAi.reps() : 12
+                                );
 
                         trainingSetService.createQuickSet(workoutExerciseId, setDTO);
                     }
@@ -165,17 +167,17 @@ public class AiWorkoutService {
         }
     }
 
+    // ================= UTILS =================
+
     private String cleanJson(String content) {
         if (content == null) return "";
-        if (content.startsWith("```json")) {
-            return content.replace("```json", "").replace("```", "").trim();
-        }
-        if (content.startsWith("```")) {
-            return content.replace("```", "").trim();
-        }
-        return content.trim();
+        return content
+                .replace("```json", "")
+                .replace("```", "")
+                .trim();
     }
 
+    // ================= DTOs IA =================
 
     private record AiWorkoutPlanDTO(
             String workoutName,
