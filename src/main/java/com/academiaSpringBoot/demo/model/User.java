@@ -32,7 +32,7 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private UserProfile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

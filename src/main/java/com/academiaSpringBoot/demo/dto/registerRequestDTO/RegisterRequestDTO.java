@@ -1,11 +1,8 @@
 package com.academiaSpringBoot.demo.dto.registerRequestDTO;
 
-import com.academiaSpringBoot.demo.dto.createDTO.UserCreateDTO;
-import com.academiaSpringBoot.demo.model.UserSex;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Schema(description = "DTO para registro público de usuários")
@@ -22,21 +19,5 @@ public record RegisterRequestDTO(
 
         @Schema(description = "Senha do usuário (mínimo de 6 caracteres)", example = "123456")
         @Size(min = 6)
-        String password,
-
-        @Schema(description = "Peso do usuário", example = "64.5")
-        @NotNull
-        Double weight,
-
-        @Schema(description = "Altura do usuário (em cm)", example = "170")
-        @NotNull
-        Double height,
-
-        @Schema(description = "Idade do usuário", example = "20")
-        @NotNull
-        Double age,
-
-        @Schema(description = "Sexo do usuário", example = "MALE")
-        @NotNull
-        UserSex sex
+        String password
 ) {}
