@@ -40,3 +40,17 @@
 ## [1.8.0] - 2026-01-11
 ### Added
 - Integration tests
+
+## [1.9.0] - 2026-01-12
+### Added
+- Implement AI for workout generate
+
+## [1.10.0] - 2026-01-13
+### Added
+- Create UserProfile logic
+
+## [1.11.0] - 2026-01-19
+### Added
+- Implement Spring AI
+- Implement replace workout plan based on the reason provided by the user
+- Adjust AI integration and remove Spring AI dependency
