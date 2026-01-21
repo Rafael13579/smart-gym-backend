@@ -7,8 +7,6 @@ public record GeminiRequestDTO(List<Content> contents) {
     public record Part(String text) {}
 
     public static GeminiRequestDTO fromPrompt(String prompt) {
-        return new GeminiRequestDTO(List.of(
-                new Content(List.of(new Part(prompt)))
-        ));
+        return new GeminiRequestDTO(List.of(new Content(List.of(new Part(prompt)))));
     }
 }

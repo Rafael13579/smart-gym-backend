@@ -30,9 +30,7 @@ public class GeminiAiProvider implements AiProvider {
         }
 
         var candidate = response.candidates().getFirst();
-        if (candidate.content() == null
-                || candidate.content().parts() == null
-                || candidate.content().parts().isEmpty()) {
+        if (candidate.content() == null || candidate.content().parts() == null || candidate.content().parts().isEmpty()) {
             throw new IllegalStateException("Conteúdo inválido retornado pela Gemini");
         }
 

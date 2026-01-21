@@ -1,11 +1,19 @@
 package com.academiaSpringBoot.demo.dto.gemini;
 
 import com.academiaSpringBoot.demo.model.WeekDays;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.List;
 
 public record AiGenerationRequestDTO(
-        String goal,               // ex: Hipertrofia
-        String experienceLevel,    // ex: Intermediário
-        Integer durationInMinutes, // ex: 60
-        List<WeekDays> availableDays// ex: ["MONDAY", "WEDNESDAY", "FRIDAY"]
-) {}
+        @Schema(description = "Objetivo do treino", example = "HYPERTROPHY")
+        String goal,
+
+        @Schema(description = "Nível de experiência", example = "INTERMEDIATE")
+        String experienceLevel,
+
+        @Schema(description = "Duração do treino (em minutos)", example = "120")
+        Integer durationInMinutes,
+
+        @Schema(description = "Dias disponíveis para treinar", example = "MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY")
+        List<WeekDays> availableDays) {}

@@ -70,7 +70,6 @@ public class AiWorkoutService {
         try {
             List<AiWorkoutPlanDTO> plans = objectMapper.readValue(jsonContent, new TypeReference<>() {});
 
-            // 2. Substitui no banco (Operação Rápida e Transacional)
             executeReplacement(user, plans);
 
         } catch (Exception e) {
@@ -113,7 +112,6 @@ public class AiWorkoutService {
                         .orElseGet(() -> {
                             Exercise e = new Exercise();
                             e.setName(exDto.exerciseName());
-                            // Verifica nulos para evitar NullPointerException
                             e.setMuscularGroup(exDto.muscularGroup() != null ? exDto.muscularGroup() : "Geral");
                             e.setDescription(exDto.description() != null ? exDto.description() : "");
                             return exerciseRepository.save(e);
