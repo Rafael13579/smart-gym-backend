@@ -1,40 +1,35 @@
-version: '3.8'
+version: "3.9"
 
 services:
-  api-academia:
-    build: .
-    container_name: academia-backend
-    ports:
-      - "8080:8080"
-    depends_on:
-      - meu-banco-postgres
+  db:
+    image: postgres:15
+    container_name: gym-postgres
+    restart: always
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - JWT_SECRET=${JWT_SECRET}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://meu-banco-postgres:5432/academia_db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1112
-    networks:
-      - academia-network
-
-  meu-banco-postgres:
-    image: postgres:15-alpine
-    container_name: academia-db-pg
-    environment:
-      - POSTGRES_DB=academia_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1112
+      POSTGRES_DB: gym_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1112
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - academia-network
 
-networks:
-  academia-network:
-    driver: bridge
+  app:
+    build: .
+    container_name: gym-backend
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/gym_app
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1112
+      JWT_SECRET: sua_chave_super_secreta
+      GEMINI_API_KEY: sua_chave_gemini
+      APP_UPLOAD_BASE_URL: https://seusite.com/api/uploads
+    restart: always
 
 volumes:
   postgres_data:
