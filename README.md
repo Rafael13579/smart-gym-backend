@@ -32,7 +32,7 @@ O projeto preza pela qualidade de código, contando com uma suíte completa de *
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Linguagem:** Java 21
+* **Linguagem:** Java 22
 * **Framework:** Spring Boot 3
 * **Banco de Dados:** PostgreSQL (Produção/Docker) & H2 (Testes)
 * **AI Integration:** Google Gemini 2.5 Flash via OpenFeign
