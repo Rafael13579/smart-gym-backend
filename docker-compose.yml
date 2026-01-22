@@ -13,6 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
+    command: java -jar target/demo-0.0.1-SNAPSHOT.jar
     build: .
     container_name: gym-backend
     depends_on:
