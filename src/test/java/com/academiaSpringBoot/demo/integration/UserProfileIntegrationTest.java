@@ -3,15 +3,14 @@ package com.academiaSpringBoot.demo.integration;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.UserProfileRepository;
 import com.academiaSpringBoot.demo.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.TestExecutionEvent; // IMPORTANTE
-import org.springframework.security.test.context.support.WithUserDetails; // IMPORTANTE
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,9 +33,6 @@ class UserProfileIntegrationTest {
     @Autowired
     private UserProfileRepository profileRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     private User user;
 
     @BeforeEach
@@ -48,10 +44,6 @@ class UserProfileIntegrationTest {
                 .name("Rafael")
                 .email("rafael@test.com")
                 .password("123")
-                .weight(80.0)
-                .height(1.75)
-                .age(23)
-                .sex(UserSex.MALE)
                 .role(User.Role.USER)
                 .build();
 
@@ -73,7 +65,7 @@ class UserProfileIntegrationTest {
             }
         """;
 
-        mockMvc.perform(post("/api/profile")
+        mockMvc.perform(post("/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())
@@ -84,20 +76,20 @@ class UserProfileIntegrationTest {
     @Test
     @WithUserDetails(value = "rafael@test.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void shouldGetProfile() throws Exception {
+        UserProfile profile = UserProfile.builder()
+                .weight(80.0)
+                .height(1.75)
+                .age(23)
+                .sex(UserSex.MALE)
+                .goal(Goal.STRENGTH)
+                .experienceLevel(ExperienceLevel.BEGINNER)
+                .build();
 
-        profileRepository.save(
-                UserProfile.builder()
-                        .user(user)
-                        .weight(80.0)
-                        .height(1.75)
-                        .age(23)
-                        .sex(UserSex.MALE)
-                        .goal(Goal.STRENGTH)
-                        .experienceLevel(ExperienceLevel.BEGINNER)
-                        .build()
-        );
-
-        mockMvc.perform(get("/api/profile"))
+        // Vincula e Salva
+        profile.setUser(user);
+        user.setProfile(profile);
+        profileRepository.save(profile);
+        mockMvc.perform(get("/profile"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.goal").value("STRENGTH"));
     }
@@ -106,12 +98,16 @@ class UserProfileIntegrationTest {
     @WithUserDetails(value = "rafael@test.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void shouldUpdateProfile() throws Exception {
 
-        profileRepository.save(
-                UserProfile.builder()
-                        .user(user)
-                        .weight(80.0)
-                        .build()
-        );
+        UserProfile profile = UserProfile.builder()
+                .weight(80.0)
+                .height(1.75)
+                .age(23)
+                .sex(UserSex.MALE)
+                .build();
+
+        profile.setUser(user);
+        user.setProfile(profile);
+        profileRepository.save(profile);
 
         var body = """
             {
@@ -119,7 +115,7 @@ class UserProfileIntegrationTest {
             }
         """;
 
-        mockMvc.perform(put("/api/profile")
+        mockMvc.perform(put("/profile")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isOk())

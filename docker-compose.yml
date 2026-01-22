@@ -22,13 +22,25 @@ services:
     ports:
       - "8080:8080"
     environment:
+      # Sobrescreve as configs do application.properties
       SPRING_PROFILES_ACTIVE: prod
+      # Conecta no container 'db' e não em localhost
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/gym_app
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 1112
-      JWT_SECRET: sua_chave_super_secreta
-      GEMINI_API_KEY: sua_chave_gemini
-      APP_UPLOAD_BASE_URL: https://seusite.com/api/uploads
+
+      # SEGURANÇA
+      JWT_SECRET: ${JWT_SECRET}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+
+      # UPLOADS (Configuração Crítica)
+      # Dentro do Docker, salvamos em /app/uploads
+      APP_UPLOAD_DIR: /app/uploads
+      # Para teste local via navegador
+      APP_UPLOAD_BASE_URL: http://localhost:8080/api/images/exercises/
+    volumes:
+      # Mapeia a pasta 'uploads' do seu Windows para '/app/uploads' no Docker
+      - ./uploads:/app/uploads
     restart: always
 
 volumes:

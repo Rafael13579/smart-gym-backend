@@ -71,38 +71,38 @@ public class WorkoutIntegrationTest {
         workoutService.create(standardUser, new WorkoutCreateDTO("Treino A", WeekDays.MONDAY));
         workoutService.create(standardUser, new WorkoutCreateDTO("Treino B", WeekDays.TUESDAY));
 
-        var lista = workoutService.listByUser(standardUser);
+        var list = workoutService.listByUser(standardUser);
 
-        assertEquals(2, lista.size());
+        assertEquals(2, list.size());
     }
 
     @Test
     void shouldUpdateWorkoutName() {
-        WorkoutCreateDTO dto = new WorkoutCreateDTO("Treino Errado", WeekDays.FRIDAY);
+        WorkoutCreateDTO dto = new WorkoutCreateDTO("Wrong workout", WeekDays.FRIDAY);
         var savedWorkout = workoutService.create(standardUser, dto);
 
-        var updated = workoutService.updateWorkoutName(savedWorkout.id(), standardUser, "Treino Correto");
+        var updated = workoutService.updateWorkoutName(savedWorkout.id(), standardUser, "Correct workout");
 
-        assertEquals("Treino Correto", updated.name());
+        assertEquals("Correct workout", updated.name());
 
         var noBanco = workoutRepository.findById(savedWorkout.id()).get();
-        assertEquals("Treino Correto", noBanco.getName());
+        assertEquals("Correct workout", noBanco.getName());
     }
 
     @Test
     void shouldNotUpdateWorkout_IfUserIsNotOwner() {
         var workout = workoutService.create(standardUser, new WorkoutCreateDTO("Treino X", WeekDays.SUNDAY));
 
-        User invasor = User.builder()
-                .name("Invasor")
+        User invader = User.builder()
+                .name("Invader")
                 .email("inv@test.com")
                 .password("123")
                 .role(User.Role.USER).build();
 
-        userRepository.save(invasor);
+        userRepository.save(invader);
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            workoutService.updateWorkoutName(workout.id(), invasor, "Hacked");
+            workoutService.updateWorkoutName(workout.id(), invader, "Hacked");
         });
     }
 

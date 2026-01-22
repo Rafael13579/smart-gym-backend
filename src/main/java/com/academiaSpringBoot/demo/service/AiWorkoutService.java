@@ -37,7 +37,7 @@ public class AiWorkoutService {
 
         UserProfile profile = user.getProfile();
         if (profile == null) {
-            throw new IllegalStateException("Usuário não possui perfil cadastrado");
+            throw new IllegalStateException("User does not have registered profile");
         }
 
         String prompt = createPrompt(user, profile, request);
@@ -50,17 +50,17 @@ public class AiWorkoutService {
             saveGeneratedWorkouts(user, plans);
 
         } catch (Exception e) {
-            log.error("Erro ao processar JSON da IA", e);
-            throw new RuntimeException("Erro ao processar resposta da IA", e);
+            log.error("Error processing JSON from AI", e);
+            throw new RuntimeException("Error processing JSON from AI", e);
         }
     }
 
     public void replaceWorkoutPlan(User user, AiReplaceWorkoutPlanDTO dto) {
-        log.info("Substituindo treino para usuário ID: {}", user.getId());
+        log.info("Replacing workout for user ID: {}", user.getId());
 
         UserProfile profile = user.getProfile();
         if (profile == null) {
-            throw new IllegalStateException("Usuário não possui perfil cadastrado");
+            throw new IllegalStateException("User does not have registered profile");
         }
 
         String prompt = replaceWorkoutPlanPrompt(user, profile, dto);
@@ -73,8 +73,8 @@ public class AiWorkoutService {
             executeReplacement(user, plans);
 
         } catch (Exception e) {
-            log.error("Erro ao processar JSON da IA no replace", e);
-            throw new RuntimeException("Erro ao processar resposta da IA", e);
+            log.error("Error processing JSON from AI in replace", e);
+            throw new RuntimeException("Error processing AI response", e);
         }
     }
 

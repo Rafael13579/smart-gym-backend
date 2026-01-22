@@ -120,13 +120,13 @@ public class TrainingSetIntegrationTest {
         TrainingSet set = new TrainingSet(null, 40.0, 10, standardWe);
         trainingSetRepository.save(set);
 
-        User invasor = User.builder().name("Invasor").email("inv@test.com").password("123").role(User.Role.USER).build();
-        userRepository.save(invasor);
+        User invader = User.builder().name("Invasor").email("inv@test.com").password("123").role(User.Role.USER).build();
+        userRepository.save(invader);
 
         TrainingSetCreateDTO dto = new TrainingSetCreateDTO(50.0, null);
 
         assertThrows(ResponseStatusException.class, () -> {
-            trainingSetService.partialUpdate(set.getId(), dto, invasor);
+            trainingSetService.partialUpdate(set.getId(), dto, invader);
         });
     }
 
