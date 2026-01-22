@@ -21,5 +21,5 @@ public record AiReplaceWorkoutPlanDTO(
         @Schema(description = "Duração do treino (em minutos)", example = "120")
         Integer durationInMinutes,
 
-        @Schema(description = "Dias disponíveis para treinar", example = "MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY")
+        @Schema(description = "Dias da semana disponíveis para treino", example = "[\"MONDAY\", \"WEDNESDAY\", \"FRIDAY\"]")
         List<WeekDays> availableDays) {}

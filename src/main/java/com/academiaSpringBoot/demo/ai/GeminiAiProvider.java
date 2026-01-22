@@ -12,7 +12,7 @@ public class GeminiAiProvider implements AiProvider {
 
     private final GeminiClient geminiClient;
 
-    @Value("${gemini.api-key:}")
+    @Value("${gemini.api-key}")
     private String apiKey;
 
     @Override

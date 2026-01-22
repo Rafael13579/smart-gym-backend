@@ -23,7 +23,7 @@ public class Exercise {
     @Column(nullable = false)
     private String muscularGroup;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String imageUrl;

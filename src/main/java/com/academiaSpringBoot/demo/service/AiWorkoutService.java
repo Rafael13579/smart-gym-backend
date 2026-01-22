@@ -206,6 +206,7 @@ public class AiWorkoutService {
         - Sexo: %s
 
         REGRAS OBRIGATÓRIAS:
+        - A descrição do exercício deve ser CURTA e DIRETA, com no máximo 200 caracteres.
         - NÃO inclua exercícios que sobrecarreguem regiões lesionadas ou mencionadas no motivo.
         - Caso o motivo envolva membros inferiores (ex: pé, joelho, tornozelo), priorize treinos de membros superiores e core.
         - Caso envolva membros superiores (ex: ombro, cotovelo, punho), priorize membros inferiores e cardio de baixo impacto.
