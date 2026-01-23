@@ -1,6 +1,6 @@
 # 🏋️ Smart Gym Backend - AI-Powered Personal Trainer
 
-![Java](https://img.shields.io/badge/Java-21-orange)
+![Java](https://img.shields.io/badge/Java-22-orange)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-green)
 ![JUnit](https://img.shields.io/badge/JUnit-5-25A162)
 ![Docker](https://img.shields.io/badge/Docker-Ready-blue)
