@@ -6,6 +6,7 @@ import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.dto.gemini.AiReplaceWorkoutPlanDTO;
 import com.academiaSpringBoot.demo.dto.gemini.AiGenerationRequestDTO;
 import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
+import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutRepository;
@@ -33,11 +34,11 @@ public class AiWorkoutService {
 
 
     public void generateWorkoutForUser(User user, AiGenerationRequestDTO request) {
-        log.info("Gerando treino para usuário ID: {}", user.getId());
+        log.info("Generating workout for user ID: {}", user.getId());
 
         UserProfile profile = user.getProfile();
         if (profile == null) {
-            throw new IllegalStateException("User does not have registered profile");
+            throw new BusinessException("User must create a profile before generating a workout");
         }
 
         String prompt = createPrompt(user, profile, request);
