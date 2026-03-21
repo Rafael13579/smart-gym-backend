@@ -45,7 +45,7 @@ O projeto preza pela qualidade de código, contando com uma suíte completa de *
 
 ### Pré-requisitos
 * Docker e Docker Compose instalados.
-* Uma chave de API do Google Gemini (AI Studio).
+* Uma chave de API do Google Gemini.
 
 ### Passo a Passo
 
