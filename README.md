@@ -12,7 +12,7 @@ O **Smart Gym Backend** é uma API robusta desenvolvida para gerenciamento de tr
 
 Diferente de apps comuns de "CRUD", este sistema atua como um **Personal Trainer Virtual**. Ele utiliza a **Gemini API (Google)** para gerar, adaptar e personalizar treinos com base no perfil biomecânico, objetivos e limitações do usuário.
 
-O projeto preza pela qualidade de código, contando com uma suíte completa de **testes unitários e de integração**.
+O projeto preza pela qualidade de código, contando com uma suíte completa de **testes unitários e de integração**
 
 ## 🚀 Funcionalidades Principais
 
