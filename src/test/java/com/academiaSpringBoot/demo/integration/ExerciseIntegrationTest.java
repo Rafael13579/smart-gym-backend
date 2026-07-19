@@ -34,9 +34,9 @@ public class ExerciseIntegrationTest {
     void shouldCreateExercise() {
         ExerciseCreateDTO dto = new ExerciseCreateDTO("Supino Reto", "Peito", "Exercicio para peito");
 
-        exerciseService.create(dto);
+        ExerciseResponseDTO response = exerciseService.create(dto);
 
-        String name = exerciseRepository.findById(1L).get().getName();
+        String name = exerciseRepository.findById(response.id()).get().getName();
         int size = exerciseRepository.findAll().size();
 
         assertEquals("Supino Reto", name);

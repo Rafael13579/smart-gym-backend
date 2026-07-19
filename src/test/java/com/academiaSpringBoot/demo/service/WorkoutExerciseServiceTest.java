@@ -1,5 +1,6 @@
 package com.academiaSpringBoot.demo.service;
 
+import com.academiaSpringBoot.demo.exception.ResourceNotFoundException;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
 import com.academiaSpringBoot.demo.repository.WorkoutExerciseRepository;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,11 +67,11 @@ class WorkoutExerciseServiceTest {
         when(workoutRepository.findByUserAndId(user, 10L))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 workoutExerciseService.addExerciseToWorkout(10L, 100L, user)
         );
 
-        assertEquals("404 NOT_FOUND \"Workout not found\"", ex.getMessage());
+        assertEquals("Workout not found", ex.getMessage());
     }
 
     @Test
@@ -86,11 +86,11 @@ class WorkoutExerciseServiceTest {
         when(exerciseRepository.findById(100L))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 workoutExerciseService.addExerciseToWorkout(10L, 100L, user)
         );
 
-        assertEquals("404 NOT_FOUND \"Exercise not found\"", ex.getMessage());
+        assertEquals("Exercise not found", ex.getMessage());
     }
 
 
@@ -120,11 +120,11 @@ class WorkoutExerciseServiceTest {
         when(workoutRepository.findByUserAndId(user, 10L))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 workoutExerciseService.deleteWorkoutExercise(10L, 100L, user)
         );
 
-        assertEquals("404 NOT_FOUND \"Workout not found\"", ex.getMessage());
+        assertEquals("Workout not found", ex.getMessage());
     }
 
     @Test
@@ -137,11 +137,11 @@ class WorkoutExerciseServiceTest {
         when(workoutRepository.findByUserAndId(user, 10L))
                 .thenReturn(Optional.of(workout));
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 workoutExerciseService.deleteWorkoutExercise(10L, 100L, user)
         );
 
-        assertEquals("404 NOT_FOUND \"Workout exercise not found\"", ex.getMessage());
+        assertEquals("Workout exercise not found", ex.getMessage());
     }
 
     @Test
@@ -181,11 +181,11 @@ class WorkoutExerciseServiceTest {
         when(workoutRepository.findByUserAndId(user, 10L))
                 .thenReturn(Optional.empty());
 
-        ResponseStatusException ex = assertThrows(ResponseStatusException.class, () ->
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () ->
                 workoutExerciseService.listByWorkout(10L, user)
         );
 
-        assertEquals("404 NOT_FOUND \"Workout not found\"", ex.getMessage());
+        assertEquals("Workout not found", ex.getMessage());
     }
 
     @Test

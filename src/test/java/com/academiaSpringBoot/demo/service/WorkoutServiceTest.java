@@ -43,10 +43,11 @@ public class WorkoutServiceTest {
         when(workoutRepository.save(any(Workout.class)))
                 .thenReturn(savedWorkout);
 
+        WorkoutResponseDTO response = workoutService.create(user, workoutCreateDTO);
 
-        assertEquals(10L, savedWorkout.getId());
-        assertEquals(workoutCreateDTO.name(), savedWorkout.getName());
-        assertTrue(savedWorkout.getWorkoutExercises().isEmpty());
+        assertEquals(10L, response.id());
+        assertEquals(workoutCreateDTO.name(), response.name());
+        assertNotNull(response.exercises());
 
         verify(workoutRepository).save(any(Workout.class));
 

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,7 +32,6 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     //LOGIN
     @Operation(summary = "Fazer login do usuário", description = "Faz login do usuário e gera um token")
     @ApiResponses({
@@ -39,7 +39,7 @@ public class AuthController {
             @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
     })
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDTO dto) {
         User user = userRepository.findByEmail(dto.email())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
 
@@ -60,7 +60,7 @@ public class AuthController {
             @ApiResponse(responseCode = "409", description = "Email já cadastrado")
     })
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterRequestDTO dto) {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDTO dto) {
 
         if (userRepository.findByEmail(dto.email()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email já cadastrado");

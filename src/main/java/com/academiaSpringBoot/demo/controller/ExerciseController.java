@@ -48,7 +48,6 @@ public class ExerciseController {
         return ResponseEntity.status(HttpStatus.CREATED).body(exerciseService.create(dto));
     }
 
-
     //DELETE
     @Operation(summary = "Remover exercício", description = "Remove um exercício existente do sistema (apenas administradores)")
     @ApiResponses({
@@ -65,7 +64,6 @@ public class ExerciseController {
         return ResponseEntity.noContent().build();
     }
 
-
     //FIND_ALL
     @Operation(summary = "Listar exercícios", description = "Retorna uma lista paginada de exercícios cadastrados")
     @ApiResponses({
@@ -76,7 +74,6 @@ public class ExerciseController {
     public ResponseEntity<Page<ExerciseResponseDTO>> findAll(@ParameterObject @PageableDefault(size = 5, sort = "name") Pageable pageable) {
         return ResponseEntity.ok(exerciseService.findAll(pageable));
     }
-
 
     //AUTOCOMPLETE
     @Operation(summary = "Autocomplete de exercícios", description = "Retorna até 5 exercícios cujo nome começa com o texto informado")
@@ -103,7 +100,7 @@ public class ExerciseController {
             @ApiResponse(responseCode = "200", description = "Exercício atualizado com sucesso")
     )
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/exerciseId")
+    @PatchMapping("/{exerciseId}")
     public ResponseEntity<ExerciseResponseDTO> partialExerciseUpdate(@PathVariable Long exerciseId, @RequestBody @Validated(ExerciseCreateDTO.OnUpdate.class) ExerciseCreateDTO dto) {
         return ResponseEntity.ok(exerciseService.partialUpdate(exerciseId, dto));
     }

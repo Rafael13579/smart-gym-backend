@@ -36,6 +36,7 @@ public class User implements UserDetails {
     private UserProfile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<Workout> workouts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
