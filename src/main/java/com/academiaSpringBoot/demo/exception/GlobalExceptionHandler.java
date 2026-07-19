@@ -6,10 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.stream.Collectors;
-
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -59,4 +58,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(AiProviderException.class)
+    public ResponseEntity<ApiError> handleAiProvider(AiProviderException ex, HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                HttpStatus.BAD_GATEWAY.value(),
+                "AI provider error",
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(error);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ApiError> handleResponseStatus(ResponseStatusException ex, HttpServletRequest request) {
+
+        int status = ex.getStatusCode().value();
+        String reason = ex.getReason() != null ? ex.getReason() : ex.getMessage();
+
+        ApiError error = new ApiError(
+                status,
+                "Request error",
+                reason,
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(ex.getStatusCode()).body(error);
+    }
 }

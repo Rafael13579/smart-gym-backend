@@ -6,6 +6,7 @@ import com.academiaSpringBoot.demo.dto.createDTO.WorkoutCreateDTO;
 import com.academiaSpringBoot.demo.dto.gemini.AiReplaceWorkoutPlanDTO;
 import com.academiaSpringBoot.demo.dto.gemini.AiGenerationRequestDTO;
 import com.academiaSpringBoot.demo.dto.responseDTO.WorkoutResponseDTO;
+import com.academiaSpringBoot.demo.exception.AiProviderException;
 import com.academiaSpringBoot.demo.exception.BusinessException;
 import com.academiaSpringBoot.demo.model.*;
 import com.academiaSpringBoot.demo.repository.ExerciseRepository;
@@ -52,7 +53,7 @@ public class AiWorkoutService {
 
         } catch (Exception e) {
             log.error("Error processing JSON from AI", e);
-            throw new RuntimeException("Error processing JSON from AI", e);
+            throw new AiProviderException("Error processing JSON from AI", e);
         }
     }
 
@@ -61,7 +62,7 @@ public class AiWorkoutService {
 
         UserProfile profile = user.getProfile();
         if (profile == null) {
-            throw new IllegalStateException("User does not have registered profile");
+            throw new BusinessException("User must create a profile before replacing a workout");
         }
 
         String prompt = replaceWorkoutPlanPrompt(user, profile, dto);
@@ -75,7 +76,7 @@ public class AiWorkoutService {
 
         } catch (Exception e) {
             log.error("Error processing JSON from AI in replace", e);
-            throw new RuntimeException("Error processing AI response", e);
+            throw new AiProviderException("Error processing AI response", e);
         }
     }
 

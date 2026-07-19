@@ -6,11 +6,15 @@ import com.academiaSpringBoot.demo.model.User;
 import com.academiaSpringBoot.demo.service.AiWorkoutService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "AI", description = "Endpoints para geração e substituição de treinos usando IA")
+@Tag(name = "AI", description = "Endpoints para geracao e substituicao de treinos usando IA")
 @RestController
 @RequestMapping("/ai")
 public class AiWorkoutController {
@@ -21,18 +25,17 @@ public class AiWorkoutController {
         this.aiWorkoutService = aiWorkoutService;
     }
 
-    @Operation(summary = "Gerar treino com IA", description = "Gera automaticamente um novo plano de treino para o usuário autenticado usando IA.")
+    @Operation(summary = "Gerar treino com IA", description = "Gera automaticamente um novo plano de treino para o usuario autenticado usando IA.")
     @PostMapping("/generate")
-    public ResponseEntity<Void> generateWorkout(@RequestBody AiGenerationRequestDTO request, Authentication authentication) {
+    public ResponseEntity<Void> generateWorkout(@Valid @RequestBody AiGenerationRequestDTO request, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         aiWorkoutService.generateWorkoutForUser(user, request);
         return ResponseEntity.ok().build();
     }
 
-
-    @Operation(summary = "Substituir plano de treino com IA", description = "Substitui o plano de treino atual do usuário autenticado por um novo plano gerado via IA.")
+    @Operation(summary = "Substituir plano de treino com IA", description = "Substitui o plano de treino atual do usuario autenticado por um novo plano gerado via IA.")
     @PostMapping("/replace")
-    public ResponseEntity<Void> replaceWorkout(@RequestBody AiReplaceWorkoutPlanDTO replace, Authentication authentication) {
+    public ResponseEntity<Void> replaceWorkout(@Valid @RequestBody AiReplaceWorkoutPlanDTO replace, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         aiWorkoutService.replaceWorkoutPlan(user, replace);
         return ResponseEntity.ok().build();
